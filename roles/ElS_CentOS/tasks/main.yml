@@ -1,0 +1,34 @@
+---
+- name: install needed files
+  package:
+    name:
+      - epel-release
+      - make
+      - openssl
+      - autoconf
+      - wget
+      - which
+      - java-1.8.0-openjdk
+    state: present
+
+- name: add elastic search
+  shell: rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: add repository
+  copy:
+    content: |
+      [elasticsearch-7.x]
+      name=Elasticsearch repository for 7.x packages
+      baseurl=https://artifacts.elastic.co/packages/7.x/yum
+      gpgcheck=1
+      gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      enabled=1
+      autoreferesh=1
+      type=rpm-md
+    dest: /etc/yum.repos.d/elasticsearch.repo
+
+- name: Install Elastic Search
+  dnf:
+    name: elasticsearch
+    state: present
+

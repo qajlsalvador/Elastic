@@ -1,0 +1,32 @@
+---
+- name: Add Elasticsearch apt key
+  apt_key:
+    url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+    state: present
+
+- name: Adding Elasticsearch repo
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+    state: present
+
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    update_cache: yes
+
+- name: updating the config file
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'network.host:'
+    line: 'network.host: 0.0.0.0'
+
+- name: updating the port in config file
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'http.port:'
+    line: 'http.port: 9200'
+
+- name: starting Elasticsearch
+  service:
+    name: elasticsearch
+    state: started

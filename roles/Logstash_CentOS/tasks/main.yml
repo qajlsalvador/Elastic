@@ -1,0 +1,19 @@
+---
+- name: Install logstash
+  dnf:
+    name: logstash
+    state: present
+
+- name: enable logstash
+  systemd:
+    name: logstash
+    enabled: yes
+    state: started
+
+- name: restart ELS
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - elasticsearch
+    - kibana

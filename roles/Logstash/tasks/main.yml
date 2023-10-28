@@ -1,0 +1,11 @@
+---
+
+- name: install Logstash
+  apt:
+    name: logstash
+    state: present
+
+- name: Restart elasticsearch
+  systemd:
+    name: elasticsearch
+    state: restarted
